@@ -1,0 +1,2 @@
+# beacon-prelude
+BEACON mascot
