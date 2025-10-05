@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEACON - Democratizing Space Observation</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1,h2,h3,h4,h5,h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #050514 0%, #0a0a1a 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Animated Background Stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        /* Navigation - Slimmer */
+        nav {
+            position: fixed;
+            top: 1.2rem; /* Reduced from 2rem */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px; /* Slightly narrower */
+            z-index: 1000;
+            padding: 0.75rem 1.5rem; /* Reduced padding */
+            background: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            border-radius: 30px; /* Softer curve */
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 24px rgba(79, 195, 247, 0.1);
+        }
+        nav.scrolled {
+            top: 0.8rem; /* Even tighter when scrolled */
+            background: rgba(10, 10, 26, 0.95);
+            box-shadow: 0 8px 32px rgba(79, 195, 247, 0.15);
+        }
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo {
+            font-size: 1.5rem; /* Slightly smaller */
+            font-weight: 800;
+             font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(79, 195, 247, 0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(79, 195, 247, 0.6)); }
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem; /* Reduced gap */
+            list-style: none;
+        }
+        .nav-links a {
+            color: #b0b0d0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem; /* Slightly smaller */
+            transition: all 0.25s ease;
+            position: relative;
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #4fc3f7, #667eea);
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+        .nav-links a:hover {
+            color: #4fc3f7;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        /* External link indicators */
+        .nav-links a[href^="#"]::after {
+            content: ' ↓';
+            font-size: 0.7rem;
+            opacity: 0.6;
+            font-weight: normal;
+        }
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 5%;
+            padding-top: 8rem; /* Reduced to match nav height */
+            overflow: hidden;
+        }
+        .hero-content {
+            max-width: 1400px;
+            text-align: center;
+            z-index: 10;
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: #b0b0d0;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: #8a8aa0;
+            margin-bottom: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            color: white;
+            box-shadow: 0 8px 32px rgba(79, 195, 247, 0.3);
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 48px rgba(79, 195, 247, 0.5);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #4fc3f7;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(79, 195, 247, 0.3);
+        }
+        .btn-secondary:hover {
+            background: rgba(79, 195, 247, 0.15);
+            border-color: #4fc3f7;
+            transform: translateY(-3px);
+        }
+        /* Glass Card */
+        .glass-card {
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .glass-card:hover::before {
+            left: 100%;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(79, 195, 247, 0.3);
+            border-color: rgba(79, 195, 247, 0.5);
+        }
+        /* Sections */
+        section {
+            padding: 8rem 5%;
+            position: relative;
+            z-index: 10;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 1s ease-out;
+        }
+        .section-header h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-header p {
+            font-size: 1.3rem;
+            color: #b0b0d0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            position: relative;
+            animation: fadeInUp 1s ease-out backwards;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(79, 195, 247, 0.3);
+        }
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        .feature-card p {
+            color: #b0b0d0;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        /* Download Section */
+        .download-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .download-card {
+            text-align: center;
+        }
+        .download-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        .download-card p {
+            color: #b0b0d0;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        .platform-logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 4px 12px rgba(79, 195, 247, 0.3));
+        }
+        /* Tier Carousel - Enhanced */
+        .tier-section {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .tier-header {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 24px;
+            background: rgba(30, 30, 50, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            padding: 1rem;
+        }
+        .carousel {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+        .tier-slide {
+            min-width: 280px;
+            flex: 0 0 280px;
+            background: rgba(40, 40, 60, 0.8);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(79, 195, 247, 0.3);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            max-height: 400px;
+        }
+        .tier-slide:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(79, 195, 247, 0.2);
+            border-color: rgba(79, 195, 247, 0.5);
+        }
+        .tier-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #4fc3f7;
+        }
+        .tier-desc {
+            color: #b0b0d0;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .tier-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1rem;
+            max-height: 150px;
+            overflow-y: auto;
+            /* Hide scrollbars */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
+        }
+        .tier-features::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        .tier-features li {
+            color: #b0b0d0;
+            font-size: 0.8rem;
+            margin-bottom: 0.4rem;
+            padding-left: 1rem;
+            position: relative;
+            line-height: 1.4;
+        }
+        .tier-features li::before {
+            content: '✓';
+            color: #4fc3f7;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .tier-pricing {
+            font-size: 0.85rem;
+            color: #8a8aa0;
+            font-weight: 600;
+            background: rgba(79, 195, 247, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.3), rgba(102, 126, 234, 0.3));
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-btn:hover {
+            background: linear-gradient(135deg, #4fc3f7, #667eea);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(79, 195, 247, 0.4);
+        }
+        .carousel-btn.prev {
+            left: 10px;
+        }
+        .carousel-btn.next {
+            right: 10px;
+        }
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(79, 195, 247, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .indicator.active {
+            background: #4fc3f7;
+            transform: scale(1.2);
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 3rem auto 0;
+        }
+        .team-card {
+            text-align: center;
+            animation: fadeInUp 1s ease-out backwards;
+        }
+        .team-card:nth-child(1) { animation-delay: 0.1s; }
+        .team-card:nth-child(2) { animation-delay: 0.2s; }
+        .team-card:nth-child(3) { animation-delay: 0.3s; }
+        .team-card:nth-child(4) { animation-delay: 0.4s; }
+        .team-avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #4fc3f7 0%, #667eea 100%);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 32px rgba(79, 195, 247, 0.4);
+            transition: all 0.3s ease;
+        }
+        .team-card:hover .team-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 12px 48px rgba(79, 195, 247, 0.6);
+        }
+        .team-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+        .team-name {
+            color: #4fc3f7;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        /* Footer */
+        footer {
+            background: rgba(5, 5, 20, 0.9);
+            border-top: 1px solid rgba(79, 195, 247, 0.2);
+            padding: 3rem 5%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        footer p {
+            color: #8a8aa0;
+            margin-bottom: 1rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-links a {
+            color: #b0b0d0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: #4fc3f7;
+        }
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .features-grid,
+            .download-cards,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 5rem 5%;
+            }
+            nav {
+                width: 95%;
+                top: 1rem;
+                padding: 0.6rem 1rem;
+            }
+            .hero {
+                padding-top: 6rem;
+            }
+            .carousel {
+                gap: 1rem;
+            }
+            .tier-slide {
+                min-width: calc(100vw - 4rem);
+                flex: 0 0 calc(100vw - 4rem);
+                max-height: none;
+            }
+            .carousel-container {
+                padding: 0.5rem;
+            }
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+
+
+        }
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4fc3f7, #667eea);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+        /* About Section Specific */
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #b0b0d0;
+            margin-bottom: 3rem;
+        }
+        .mission-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .mission-vision h3 {
+            font-size: 2rem;
+            color: #4fc3f7;
+            margin-bottom: 1rem;
+        }
+        .mission-vision p {
+            color: #b0b0d0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        /* Enhanced Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        .slide-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        .slide-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Stars Background -->
+    <div class="stars" id="stars"></div>
+    <!-- Scroll Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">BEACON</div>
+           <ul class="nav-links">
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Features</a></li>
+                <li><a href="#download"><i class="fas fa-download"></i> Download</a></li>
+                <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="#team"><i class="fas fa-users"></i> Team</a></li>
+                <li><a href="https://github.com/yunik2code/thePlanckEpoch.git" target="_blank"><i class="fab fa-github"></i> GitHub</a></li>
+                <li><a href="Beaconator.html" target="_blank"><i class="fas fa-globe"></i> 3D Visualization</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="floating">BEACON</h1>
+            <p class="subtitle">Broad Engagement and Access to Cosmic Observation Network</p>
+            <p class="tagline">Democratizing space observation through a constellation of 32 LEO space telescopes. Control your personal observatory from anywhere on Earth.
+            </p>
+            <div class="cta-buttons">
+                <a href="#download" class="btn btn-primary">Download App</a>
+                <a href="#features" class="btn btn-secondary">Explore Features</a>
+                <a href="https://github.com/yunik2code/thePlanckEpoch.git" class="btn btn-secondary" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="Beaconator.html" class="btn btn-secondary" target="_blank"><i class="fas fa-globe"></i> 3D Visualization</a>
+            </div>
+             <br><br>
+<i style="color: white;">We have above provided the download link of our Software BEACON, GitHub Repository of our project and the 3D visualization of our central scheduling system.</i>
+        </div>
+    </section>
+    <!-- Features Section -->
+    <section id="features">
+        <div class="section-header">
+            <h2>Revolutionary Features</h2>
+            <p>Experience astronomy like never before with real-time control, AI-driven resource allocation, and unprecedented access to the cosmos.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card glass-card slide-left">
+                <div class="feature-icon">🔭</div>
+                <h3>Real-Time Control</h3>
+                <p>Book sky spots and control telescope pointing in real-time. Zoom, pan, and track celestial objects with live image streams directly to your device.</p>
+            </div>
+            <div class="feature-card glass-card slide-right">
+                <div class="feature-icon">🌌</div>
+                <h3>Deep Space Imaging</h3>
+                <p>Capture stunning images of distant galaxies, nebulae, and star clusters. Our interferometry technology delivers 0.02 arcsec resolution.</p>
+            </div>
+            <div class="feature-card glass-card slide-left">
+                <div class="feature-icon">☄️</div>
+                <h3>Asteroid Tracking</h3>
+                <p>Track small solar system bodies with advanced computer vision and Kalman filtering for accurate path prediction and discovery.</p>
+            </div>
+            <div class="feature-card glass-card slide-right">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Scheduling</h3>
+                <p>Smart resource allocation with time-slicing and dynamic scheduling ensures seamless observation handoffs as targets move across the sky.</p>
+            </div>
+            <div class="feature-card glass-card slide-left">
+                <div class="feature-icon">👥</div>
+                <h3>Multi-User Access</h3>
+                <p>Supports 200-450 concurrent users with sub-array grouping. Multiple observers can share telescope time efficiently.</p>
+            </div>
+            <div class="feature-card glass-card slide-right">
+                <div class="feature-icon">📡</div>
+                <h3>Global Coverage</h3>
+                <p>Walker-Delta constellation in LEO provides worldwide sky coverage with 50-100 ground stations for continuous connectivity.</p>
+            </div>
+        </div>
+    </section>
+    <!-- Download Section -->
+    <section id="download" style="background: rgba(10, 10, 30, 0.4);">
+        <div class="section-header">
+            <h2>Download BEACON</h2>
+            <p>Access the universe from your device. Choose your platform and start exploring.</p>
+        </div>
+        <div class="download-content">
+            <div class="download-cards">
+                <div class="download-card glass-card slide-left">
+                    <img src="https://www.citypng.com/public/uploads/preview/download-hd-finder-macos-apple-icon-png-701751694972479tiz3ryenmd.png" alt="macOS Logo" class="platform-logo">
+                    <h3>macOS</h3>
+                    <p>Full-featured application for macOS. Requires macOS 11.0 or later.</p>
+                    <a href="#" class="btn btn-primary">Coming soon on MacOS</a>
+                </div>
+                <div class="download-card glass-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/512px-Tux.svg.png" alt="Linux Logo" class="platform-logo">
+                    <h3>Linux</h3>
+                    <p>Full-featured application for Linux distributions. Supports Ubuntu 20.04+ and equivalents.</p>
+                    <a href="https://drive.google.com/file/d/1QAfGX6JCHpcPbREuPxilu1LdUVGrPyKg/view?fbclid=IwY2xjawNPU-VleHRuA2FlbQIxMQABHuZTUDr6JwGG10bcH-Ub9Th-_TLsmI9HEgP8rJchR0UCw60nDL0PIdbrhqjP_aem_IL7OJxjeTgjmNlAHmfz6Hw" class="btn btn-primary">Download Now</a>
+                </div>
+                <div class="download-card glass-card slide-right">
+                    <img src="https://www.citypng.com/public/uploads/preview/hd-windows-11-logo-icon-transparent-background-701751694967888zqtluh5aaw.png" alt="Windows Logo" class="platform-logo">
+                    <h3>Windows</h3>
+                    <p>Full-featured application for Windows. Requires Windows 10 or later.</p>
+                    <a href="https://drive.google.com/file/d/1hlWWbhZ8hgCAb_Ui8KTTmPysgeS7RqsE/view?fbclid=IwY2xjawNPVVpleHRuA2FlbQIxMQABHpdjyvuFExLN6Ay7VOtc5N4HeOKE95ASYrVZ0Jn_S-qpAIYkfjnOKRntEDtc_aem_-2jKHdGf0o8liNRd2KBs1w" class="btn btn-primary">Download Now</a>
+                </div>
+            </div>
+            <div class="tier-section">
+                <h3 class="tier-header">Subscription Tiers</h3>
+                <div class="carousel-container">
+                    
+                    <div class="carousel" id="carousel">
+                        <div class="tier-slide">
+                            <div class="tier-title" style="color: #4fc3f7;">Tier 0</div>
+                            <div class="tier-desc">Research/Organizations</div>
+                            <ul class="tier-features">
+                                <li>Institutional licenses for bulk access</li>
+                                <li>Advanced tools and controls</li>
+                                <li>Highest priority in resource allocation</li>
+                                <li>Real-time tracking: $200/session</li>
+                                <li>IS&P: $400/session (imaging, spectroscopy, photometry)</li>
+                                <li>Unlimited archives access</li>
+                            </ul>
+                            <div class="tier-pricing">Premium institutional access</div>
+                        </div>
+                        <div class="tier-slide">
+                            <div class="tier-title" style="color: #667eea;">Tier 1</div>
+                            <div class="tier-desc">Super (Individual)</div>
+                            <ul class="tier-features">
+                                <li>Complete access to settings and real-time controls</li>
+                                <li>Higher priority in resource allocation and time slicing</li>
+                                <li>Real-time tracking: $50/session</li>
+                                <li>IS&P: $100/session</li>
+                                <li>Unlimited archives access</li>
+                                <li>Live observation sessions</li>
+                            </ul>
+                            <div class="tier-pricing">Full real-time control</div>
+                        </div>
+                        <div class="tier-slide">
+                            <div class="tier-title" style="color: #34a853;">Tier 2</div>
+                            <div class="tier-desc">Pro (Individual)</div>
+                            <ul class="tier-features">
+                                <li>Similar to Tier 1 with lower priority</li>
+                                <li>Occasional sharing sessions</li>
+                                <li>Real-time tracking: $30/session</li>
+                                <li>IS&P: $60/session</li>
+                                <li>Unlimited archives access</li>
+                                <li>Live observation with sharing</li>
+                            </ul>
+                            <div class="tier-pricing">Professional access</div>
+                        </div>
+                        <div class="tier-slide">
+                            <div class="tier-title" style="color: #fbbc05;">Tier 3</div>
+                            <div class="tier-desc">Enthusiast</div>
+                            <ul class="tier-features">
+                                <li>Access to recorded sessions only</li>
+                                <li>Premium image archives</li>
+                                <li>Tracking: $3/session (recorded)</li>
+                                <li>IS&P: $6/session (recorded)</li>
+                                <li>Unlimited archives access</li>
+                                <li>No real-time control</li>
+                            </ul>
+                            <div class="tier-pricing">Hobbyist access</div>
+                        </div>
+                    </div>
+                   
+                    <div class="carousel-indicators">
+                        <span class="indicator active" onclick="currentSlide(1)"></span>
+                        <span class="indicator" onclick="currentSlide(2)"></span>
+                        <span class="indicator" onclick="currentSlide(3)"></span>
+                        <span class="indicator" onclick="currentSlide(4)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section id="about">
+        <div class="section-header">
+            <h2>About BEACON</h2>
+            <p>Revolutionizing public access to space-based astronomical observations</p>
+        </div>
+        <div class="about-content">
+            <div class="glass-card slide-left">
+                <p class="about-text">
+                    BEACON is a pioneering project that aims to democratize access to high-quality space-based astronomical observations. 
+                    Our constellation of 32 small space telescopes in Low Earth Orbit enables thousands of users worldwide to explore the 
+                    universe in real-time, providing an interactive experience comparable to having a personal space observatory.
+                </p>
+                <p class="about-text">
+                    Inspired by Starlink's connectivity model, BEACON allows users to book "sky spots" for live tracking, zooming, and 
+                    imaging of stars, planets, asteroids, and galaxies. With advanced features like AI-driven resource allocation, 
+                    interferometry for high-resolution imaging, and support for hundreds of concurrent users, we're making professional-grade 
+                    astronomy accessible to everyone.
+                </p>
+            </div>
+            <div class="mission-vision">
+                <div class="glass-card slide-right">
+                    <h3>🎯 Mission</h3>
+                    <p>To democratize access to space-based astronomical observations and inspire the next generation of astronomers, 
+                    scientists, and space enthusiasts through real-time, interactive experiences with our orbital telescope network.</p>
+                </div>
+                <div class="glass-card slide-left">
+                    <h3>🚀 Vision</h3>
+                    <p>A future where anyone, anywhere can explore the cosmos through affordable, on-demand access to professional 
+                    space telescopes, advancing scientific discovery and fostering global engagement with astronomy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team Section -->
+    <section id="team" style="background: rgba(10, 10, 30, 0.4);">
+        <div class="section-header">
+            <h2>The Planck Epoch</h2>
+            <p>Meet the visionaries behind BEACON, working to bring the universe closer to everyone</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card glass-card">
+                <div class="team-avatar">MB</div>
+                <h3>Mayank Bhusal</h3>
+                <p class="team-name">The Planck Epoch</p>
+            </div>
+            <div class="team-card glass-card">
+                <div class="team-avatar">NG</div>
+                <h3>Nishant Gyawali</h3>
+                <p class="team-name">The Planck Epoch</p>
+            </div>
+            <div class="team-card glass-card">
+                <div class="team-avatar">YA</div>
+                <h3>Yunique Adhikari</h3>
+                <p class="team-name">The Planck Epoch</p>
+            </div>
+            <div class="team-card glass-card">
+                <div class="team-avatar">AP</div>
+                <h3>Anushka Pantha</h3>
+                <p class="team-name">The Planck Epoch</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem;">
+            <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+                <p style="color: #b0b0d0; font-size: 1.1rem; line-height: 1.8;">
+                    Students of <strong style="color: #4fc3f7;">Horizon GBS School</strong><br>
+                    Butwal, Lumbini, Nepal
+                </p>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#download">Download</a>
+            <a href="#about">About</a>
+            <a href="#team">Team</a>
+        </div>
+        <p>&copy; 2025 BEACON - The Planck Epoch. All rights reserved.</p>
+        <p style="font-size: 0.9rem;">Democratizing access to the cosmos, one observation at a time.</p>
+    </footer>
+    <script>
+        // Generate animated stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        // Observe all animated elements
+        document.querySelectorAll('.glass-card, .feature-card, .team-card').forEach(el => {
+            observer.observe(el);
+        });
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const hero = document.querySelector('.hero-content');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - scrolled / 800;
+            }
+        });
+        // Add hover effect to cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+        // Enhanced Carousel functionality
+        let currentSlideIndex = 0;
+        let autoSlideInterval;
+        const slides = document.querySelectorAll('.tier-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const totalSlides = slides.length;
+        const slideWidth = 300;
+        function showSlide(index) {
+            const carousel = document.getElementById('carousel');
+            carousel.style.transform = `translateX(-${index * slideWidth}px)`;
+            indicators.forEach(ind => ind.classList.remove('active'));
+            indicators[index].classList.add('active');
+            currentSlideIndex = index;
+        }
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
+            if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
+            showSlide(currentSlideIndex);
+        }
+        function currentSlide(index) {
+            showSlide(index - 1);
+        }
+        // function startAutoSlide() {
+        //     autoSlideInterval = setInterval(() => {
+        //         changeSlide(1);
+        //     }, 4000);
+        // }
+        // function pauseAutoSlide() {
+        //     clearInterval(autoSlideInterval);
+        // }
+        // function resumeAutoSlide() {
+        //     startAutoSlide();
+        // }
+        // Initialize carousel — starts on Tier 0
+        showSlide(0);
+                // Add floating particles effect
+        const createFloatingParticle = () => {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 4 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = 'rgba(79, 195, 247, 0.3)';
+            particle.style.borderRadius = '50%';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = '100%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1';
+            particle.style.boxShadow = '0 0 10px rgba(79, 195, 247, 0.5)';
+            document.body.appendChild(particle);
+            const duration = Math.random() * 10000 + 10000;
+            const drift = (Math.random() - 0.5) * 200;
+            particle.animate([
+                { transform: 'translateY(0) translateX(0)', opacity: 0 },
+                { transform: `translateY(-100vh) translateX(${drift}px)`, opacity: 0.6 },
+                { transform: `translateY(-200vh) translateX(${drift * 2}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            }).onfinish = () => {
+                particle.remove();
+            };
+        };
+        setInterval(createFloatingParticle, 3000);
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createFloatingParticle, i * 600);
+        }
+        console.log('%cBEACON%c - Democratizing Space Observation', 'color: #4fc3f7; font-size: 24px; font-weight: bold;', 'color: #b0b0d0; font-size: 14px;');
+        console.log('Explore the cosmos at beacon.space');
+    </script>
+</body>
+</html>
